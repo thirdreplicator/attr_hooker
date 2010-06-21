@@ -1,0 +1,1 @@
+A little class that lets you add hooks into attr_accessor-like methods.  Pure Ruby.
