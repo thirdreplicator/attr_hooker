@@ -7,7 +7,8 @@ class AttrHooker
   end
 
   def self.validate_by_type(name, value)
-    if (! value.kind_of?(@valid_types[name.to_sym]))
+    @valid_types ||= {}
+    if (@valid_types[name.to_sym] && ! value.kind_of?(@valid_types[name.to_sym]))
       raise "Dude, wrong type: #{value}(#{value.class.to_s}) should be a #{@valid_types[name.to_sym]}"
     end
   end
@@ -25,7 +26,9 @@ class AttrHooker
 
   def self.validate_this(name, value)
     validate_accessible(name)
-    validate_by_type(name, value)
+    if value
+      validate_by_type(name, value)
+    end
     # You can add other kinds of validations here.
   end
 
@@ -48,8 +51,3 @@ class A < AttrHooker
   attr_hooker :name, :age
   valid_type_for :name, String
 end
-
-a = A.new
-a.name = 'David'
-puts a.name
-puts a.city = "San Francisco"
